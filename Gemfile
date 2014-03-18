@@ -32,16 +32,18 @@ group :doc do
   gem 'sdoc', require: false
 end
 
-group :production do
-	gem 'pg'
-	gen 'rails_12factor'
-end
 
-
-group :development, ;text do
+group :development do
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3', require: false
 end
+
+group :production do
+	gem 'pg'
+	gem 'rails_12factor'
+end
+
+
 
 
 # Use ActiveModel has_secure_password
