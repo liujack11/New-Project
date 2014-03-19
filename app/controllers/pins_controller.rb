@@ -1,5 +1,8 @@
 class PinsController < ApplicationController
   before_action :set_pin, only: [:show, :edit, :update, :destroy]
+  before_action :correct_user, only: [:edit, :update, :destroy]
+  before_action :authenticate_user!, except: [:show, :index]
+  
 
   # GET /pins
   # GET /pins.json
@@ -9,22 +12,22 @@ class PinsController < ApplicationController
 
   # GET /pins/1
   # GET /pins/1.json
-  def show
+  def show #read
   end
 
   # GET /pins/new
-  def new
-    @pin = Pin.new
+  def new #part of the create action
+    @pin = current_user.pins.build
   end
 
   # GET /pins/1/edit
-  def edit
+  def edit #part of the update action
   end
 
   # POST /pins
   # POST /pins.json
   def create
-    @pin = Pin.new(pin_params)
+    @pin = current_user.pins.build(pin_params)
 
     respond_to do |format|
       if @pin.save
@@ -65,6 +68,11 @@ class PinsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_pin
       @pin = Pin.find(params[:id])
+    end
+
+    def correct_user
+      @pin = current_user.pins.find_by(id: params[:id])
+      redirect_to pins_path, notice: "Not authorized to edit this pin" if @pin.nil?
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
